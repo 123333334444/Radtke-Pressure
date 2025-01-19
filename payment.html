@@ -1,0 +1,83 @@
+<script>
+// Assuming the PayPal payment process is complete
+
+paypal.Buttons({
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: getQueryParam("price")
+                },
+                description: getQueryParam("service")
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            // Simulate capturing transaction details and save in localStorage or send to backend
+            const transactionData = {
+                transactionId: details.id,
+                service: getQueryParam("service"),
+                price: getQueryParam("price"),
+                name: getQueryParam("name"),
+                email: getQueryParam("email"),
+                phone: getQueryParam("phone"),
+                date: new Date().toLocaleString(),
+                paymentStatus: 'Success'
+            };
+
+            // Save to localStorage (or send to a backend server)
+            localStorage.setItem('paymentTransaction', JSON.stringify(transactionData));
+
+            // Redirect to confirmation page
+            alert('Payment Successful! Your booking is confirmed.');
+            window.location.href = "confirmation.html";
+        });
+    },
+    onError: function(err) {
+        alert("Error in payment. Please try again.");
+    }
+}).render('#paypal-button-container');
+</script>
+<script>
+    // Assuming the PayPal payment process is complete
+    
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: getQueryParam("price")
+                    },
+                    description: getQueryParam("service")
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                // Simulate capturing transaction details and save in localStorage or send to backend
+                const transactionData = {
+                    transactionId: details.id,
+                    service: getQueryParam("service"),
+                    price: getQueryParam("price"),
+                    name: getQueryParam("name"),
+                    email: getQueryParam("email"),
+                    phone: getQueryParam("phone"),
+                    date: new Date().toLocaleString(),
+                    paymentStatus: 'Success'
+                };
+    
+                // Save to localStorage (or send to a backend server)
+                localStorage.setItem('paymentTransaction', JSON.stringify(transactionData));
+    
+                // Redirect to confirmation page
+                alert('Payment Successful! Your booking is confirmed.');
+                window.location.href = "confirmation.html";
+            });
+        },
+        onError: function(err) {
+            alert("Error in payment. Please try again.");
+        }
+    }).render('#paypal-button-container');
+    </script>
+    
